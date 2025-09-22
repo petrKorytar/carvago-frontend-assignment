@@ -1,8 +1,9 @@
 import React from 'react';
-import {Box, Container, Heading, Text, Link, VStack, Center} from '@chakra-ui/react';
+import {Box, Container, Text, Link, VStack, Center} from '@chakra-ui/react';
 import {Link as RouterLink, useNavigate, useLocation} from 'react-router-dom';
 import {LoginForm} from '../../components/forms/LoginForm';
 import {useAuth} from '../../hooks/useAuth';
+import {ReactComponent as Logo} from '../../assets/logo.svg';
 
 export const Login: React.FC = () => {
   const {login} = useAuth();
@@ -27,12 +28,7 @@ export const Login: React.FC = () => {
       <Center>
         <VStack spacing={8} w="full" maxW="800px">
           <Box textAlign="center">
-            <Heading as="h1" size="xl" color="blue.900" mb={4}>
-              Přihlášení
-            </Heading>
-            <Text color="gray.600" fontSize="lg">
-              Přihlaste se do svého účtu
-            </Text>
+            <Logo width="100px" height="auto" />
           </Box>
 
           <LoginForm onSubmit={handleLogin} />

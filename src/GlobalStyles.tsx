@@ -31,7 +31,7 @@ const GlobalStyle = createGlobalStyle`
      font-size: 100%;
      font: inherit;
      vertical-align: baseline;
-     background-color: #E5E5E5;
+     background-color: white;
      color: #091E42;
    }
    html, body, #root{

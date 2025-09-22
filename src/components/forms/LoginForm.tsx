@@ -1,10 +1,10 @@
 import React from 'react';
 import {
   Box,
-  Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Heading,
   Input,
   Text,
   VStack,
@@ -13,6 +13,9 @@ import {
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {LoginFormData, loginFormValidation} from '../../validations/loginFormValidation';
+import {ReactComponent as ArrowForward} from '../../assets/icons/icon-foward.svg';
+import {PasswordInput} from '../ui/PasswordInput';
+import {CustomButton} from '../ui/CustomButton';
 
 interface LoginFormProps {
   onSubmit: (data: LoginFormData) => Promise<void>;
@@ -55,9 +58,17 @@ export const LoginForm: React.FC<LoginFormProps> = ({onSubmit, isLoading = false
   };
 
   return (
-    <Box w="full" maxW="2xl" mx="auto" p={6} bg="white" borderRadius="lg" boxShadow="lg">
+    <Box w="full" maxW="xl" mx="auto" p={6} borderRadius="lg" boxShadow="lg">
+      <Box textAlign="center" marginBottom={8}>
+        <Heading as="h1" size="lg" color="blue.900" mb={4}>
+          Přihlášení
+        </Heading>
+        <Text color="gray.600" fontSize="md">
+          Přihlaste se do svého účtu
+        </Text>
+      </Box>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
-        <VStack spacing={4}>
+        <VStack spacing={8}>
           <FormControl isInvalid={!!errors.username}>
             <FormLabel htmlFor="username">
               <Text as="span" color="red.500">
@@ -79,38 +90,28 @@ export const LoginForm: React.FC<LoginFormProps> = ({onSubmit, isLoading = false
             <FormErrorMessage>{errors.username && errors.username.message}</FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.password}>
-            <FormLabel htmlFor="password">
-              <Text as="span" color="red.500">
-                *
-              </Text>{' '}
-              Heslo
-            </FormLabel>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Zadejte heslo"
-              borderColor={errors.password ? 'red.500' : 'gray.300'}
-              _focus={{
-                borderColor: errors.password ? 'red.500' : 'blue.500',
-                boxShadow: errors.password ? '0 0 0 1px red.500' : '0 0 0 1px blue.500',
-              }}
-              {...register('password')}
-            />
-            <FormErrorMessage>{errors.password && errors.password.message}</FormErrorMessage>
-          </FormControl>
+          <PasswordInput
+            id="password"
+            label="Heslo"
+            placeholder="Zadejte heslo"
+            required
+            register={register}
+            name="password"
+            isInvalid={!!errors.password}
+            errorMessage={errors.password?.message}
+          />
 
-          <Button
+          <CustomButton
             type="submit"
             colorScheme="blue"
-            size="lg"
+            size="sm"
             width="full"
             borderRadius={100}
             isLoading={isSubmitting || isLoading}
             loadingText="Přihlašuji..."
           >
-            Přihlásit se
-          </Button>
+            Přihlásit se <ArrowForward color="white" style={{marginLeft: 8}} />
+          </CustomButton>
         </VStack>
       </form>
     </Box>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Box,
   Container,
@@ -15,14 +15,25 @@ import {
   Center,
   Flex,
   useToast,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Avatar,
 } from '@chakra-ui/react';
 import {useAuth} from '../../hooks/useAuth';
 import {useTodos} from '../../hooks/useTodos';
 import {useNavigate} from 'react-router-dom';
 import TodoItem from '../../components/ui/TodoItem';
+import {ReactComponent as Logo} from '../../assets/logo.svg';
+import {ReactComponent as IconAdd} from '../../assets/icons/icon-add.svg';
+import {ReactComponent as Image1} from '../../assets/Image1.svg';
+import moment from 'moment';
+import 'moment/locale/cs';
 
 export const Dashboard: React.FC = () => {
   const {logout} = useAuth();
+  const [currentTime, setCurrentTime] = useState(moment().locale('cs'));
   const {
     todos,
     isLoadingTodos,
@@ -35,6 +46,15 @@ export const Dashboard: React.FC = () => {
   } = useTodos();
   const navigate = useNavigate();
   const toast = useToast();
+
+  // Aktualizace času každou sekundu
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(moment().locale('cs'));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
   const cardBg = useColorModeValue('white', 'gray.800');
 
   const handleLogout = () => {
@@ -113,15 +133,32 @@ export const Dashboard: React.FC = () => {
           <HStack justify="space-between" align="center">
             <Box>
               <Heading as="h1" size="xl" color="blue.900">
-                Dashboard
+                <Logo width="150px" height="auto" />
               </Heading>
-              <Text color="gray.600" fontSize="lg">
-                Vítejte na dashboardu!
-              </Text>
             </Box>
-            <Button colorScheme="red" variant="outline" onClick={handleLogout}>
-              Odhlásit se
-            </Button>
+            <Menu>
+              <MenuButton
+                as={Button}
+                variant="ghost"
+                backgroundColor="transparent"
+                leftIcon={<Avatar size="xs" name="Uživatel" bg="gray.200" />}
+                fontSize="sm"
+              >
+                <Text
+                  fontSize="sm"
+                  fontWeight={400}
+                  color="gray.700"
+                  backgroundColor={'transparent'}
+                >
+                  Uživatel
+                </Text>
+              </MenuButton>
+              <MenuList bg="white" boxShadow="lg" border={'1px solid #E6E8EF'}>
+                <MenuItem color="red.500" _hover={{bg: 'red.50'}} onClick={handleLogout}>
+                  Odhlásit se
+                </MenuItem>
+              </MenuList>
+            </Menu>
           </HStack>
         </Box>
 
@@ -130,9 +167,14 @@ export const Dashboard: React.FC = () => {
           <Card bg={cardBg} boxShadow="lg">
             <CardHeader>
               <Flex justify="space-between" align="center">
-                <Heading size="md">Moje úkoly</Heading>
-                <Button colorScheme="blue" size="sm" onClick={handleAddTodo}>
-                  Přidat úkol
+                <VStack align="start" spacing={1}>
+                  <Heading size="md">Ahoj uživateli!</Heading>
+                  <Text fontSize="sm" color="gray.600">
+                    {currentTime.format('dddd, D. MMMM YYYY, HH:mm:ss')}
+                  </Text>
+                </VStack>
+                <Button colorScheme="blue" size="sm" onClick={handleAddTodo} fontWeight={400}>
+                  Přidat úkol <IconAdd style={{marginLeft: 8}} />
                 </Button>
               </Flex>
             </CardHeader>
@@ -143,18 +185,82 @@ export const Dashboard: React.FC = () => {
                 </Center>
               )}
               {todos.length > 0 ? (
-                <VStack spacing={3} align="stretch">
-                  {todos.map((todo) => (
-                    <TodoItem
-                      key={todo.id}
-                      todo={todo}
-                      handleEditTodo={handleEditTodo}
-                      handleToggleComplete={handleToggleComplete}
-                      handleDeleteTodo={handleDeleteTodo}
-                      isUpdatingTodo={isCompletingTodo || isIncompletingTodo}
-                      isDeletingTodo={isDeletingTodo}
-                    />
-                  ))}
+                <VStack spacing={6} align="stretch">
+                  {/* Sekce: K dokončení */}
+                  {todos.filter((todo) => !todo.completed).length > 0 ? (
+                    <Box>
+                      <Heading
+                        size="sm"
+                        color="gray.700"
+                        mb={3}
+                        borderBottom={'1px solid #E6E8EF'}
+                        pb={3}
+                      >
+                        TO DO
+                      </Heading>
+                      <VStack spacing={3} align="stretch">
+                        {todos
+                          .filter((todo) => !todo.completed)
+                          .map((todo) => (
+                            <TodoItem
+                              key={todo.id}
+                              todo={todo}
+                              handleEditTodo={handleEditTodo}
+                              handleToggleComplete={handleToggleComplete}
+                              handleDeleteTodo={handleDeleteTodo}
+                              isUpdatingTodo={isCompletingTodo || isIncompletingTodo}
+                              isDeletingTodo={isDeletingTodo}
+                            />
+                          ))}
+                      </VStack>
+                    </Box>
+                  ) : (
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="center"
+                      justifyContent="center"
+                      gap={4}
+                    >
+                      <Image1 />
+                      <Text fontSize="lg" fontWeight={700} color="gray.800">
+                        Jste skvělí!
+                      </Text>
+                      <Text fontSize="sm" color="gray.600">
+                        Žádné další úkoly k dokončení
+                      </Text>
+                    </Box>
+                  )}
+
+                  {/* Sekce: Dokončené */}
+                  {todos.filter((todo) => todo.completed).length > 0 && (
+                    <Box>
+                      <Heading
+                        size="sm"
+                        color="gray.700"
+                        mb={3}
+                        borderBottom={'1px solid #E6E8EF'}
+                        pb={3}
+                      >
+                        Dokončené
+                      </Heading>
+                      <VStack spacing={3} align="stretch">
+                        {todos
+                          .filter((todo) => todo.completed)
+                          .map((todo) => (
+                            <TodoItem
+                              key={todo.id}
+                              todo={todo}
+                              handleEditTodo={handleEditTodo}
+                              handleToggleComplete={handleToggleComplete}
+                              handleDeleteTodo={handleDeleteTodo}
+                              isUpdatingTodo={isCompletingTodo || isIncompletingTodo}
+                              isDeletingTodo={isDeletingTodo}
+                            />
+                          ))}
+                      </VStack>
+                    </Box>
+                  )}
                 </VStack>
               ) : (
                 <Center py={8}>

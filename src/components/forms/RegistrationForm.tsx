@@ -1,11 +1,12 @@
 import React from 'react';
 import {
   Box,
-  Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Heading,
   Input,
+  Text,
   VStack,
   useToast,
 } from '@chakra-ui/react';
@@ -15,6 +16,9 @@ import {
   registrationFormValidation,
   RegistrationFormData,
 } from '../../validations/registrationFormValidation';
+import {ReactComponent as ArrowForward} from '../../assets/icons/icon-foward.svg';
+import {PasswordInput} from '../ui/PasswordInput';
+import {CustomButton} from '../ui/CustomButton';
 
 interface RegistrationFormProps {
   onSubmit: (data: RegistrationFormData) => Promise<void>;
@@ -60,54 +64,71 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
   };
 
   return (
-    <Box maxW="md" mx="auto" p={6} bg="white" borderRadius="lg" boxShadow="lg">
+    <Box w="full" maxW="xl" mx="auto" p={6} borderRadius="lg" boxShadow="lg">
+      <Box textAlign="center" marginBottom={8}>
+        <Heading as="h1" size="lg" color="blue.900" mb={4}>
+          Registrace
+        </Heading>
+        <Text color="gray.600" fontSize="md">
+          Vytvořte si nový účet a začněte používat naši aplikaci
+        </Text>
+      </Box>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
-        <VStack spacing={4}>
+        <VStack spacing={8}>
           <FormControl isInvalid={!!errors.username}>
-            <FormLabel htmlFor="username">Uživatelské jméno</FormLabel>
+            <FormLabel htmlFor="username">
+              <Text as="span" color="red.500">
+                *
+              </Text>{' '}
+              Uživatelské jméno
+            </FormLabel>
             <Input
               id="username"
               type="text"
               placeholder="Zadejte vaše uživatelské jméno"
+              borderColor={errors.username ? 'red.500' : 'gray.300'}
+              _focus={{
+                borderColor: errors.username ? 'red.500' : 'blue.500',
+                boxShadow: errors.username ? '0 0 0 1px red.500' : '0 0 0 1px blue.500',
+              }}
               {...register('username')}
             />
             <FormErrorMessage>{errors.username && errors.username.message}</FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.password}>
-            <FormLabel htmlFor="password">Heslo</FormLabel>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Zadejte heslo"
-              {...register('password')}
-            />
-            <FormErrorMessage>{errors.password && errors.password.message}</FormErrorMessage>
-          </FormControl>
+          <PasswordInput
+            id="password"
+            label="Heslo"
+            placeholder="Zadejte heslo"
+            required
+            register={register}
+            name="password"
+            isInvalid={!!errors.password}
+            errorMessage={errors.password?.message}
+          />
 
-          <FormControl isInvalid={!!errors.confirmPassword}>
-            <FormLabel htmlFor="confirmPassword">Potvrzení hesla</FormLabel>
-            <Input
-              id="confirmPassword"
-              type="password"
-              placeholder="Zadejte heslo znovu"
-              {...register('confirmPassword')}
-            />
-            <FormErrorMessage>
-              {errors.confirmPassword && errors.confirmPassword.message}
-            </FormErrorMessage>
-          </FormControl>
+          <PasswordInput
+            id="confirmPassword"
+            label="Potvrzení hesla"
+            placeholder="Zadejte heslo znovu"
+            required
+            register={register}
+            name="confirmPassword"
+            isInvalid={!!errors.confirmPassword}
+            errorMessage={errors.confirmPassword?.message}
+          />
 
-          <Button
+          <CustomButton
             type="submit"
             colorScheme="blue"
-            size="lg"
+            size="sm"
             width="full"
+            borderRadius={100}
             isLoading={isSubmitting || isLoading}
             loadingText="Registruji..."
           >
-            Registrovat se
-          </Button>
+            Registrovat se <ArrowForward color="white" style={{marginLeft: 8}} />
+          </CustomButton>
         </VStack>
       </form>
     </Box>

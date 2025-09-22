@@ -1,9 +1,10 @@
 import React from 'react';
-import {Box, Container, Heading, Text, Link, VStack, Center} from '@chakra-ui/react';
+import {Box, Container, Text, Link, VStack, Center} from '@chakra-ui/react';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {RegistrationForm} from '../../components/forms/RegistrationForm';
 import {useAuth} from '../../hooks/useAuth';
 import {setTokens} from '../../utils/authService';
+import {ReactComponent as Logo} from '../../assets/logo.svg';
 
 export const Registration: React.FC = () => {
   const {register} = useAuth();
@@ -30,12 +31,7 @@ export const Registration: React.FC = () => {
       <Center>
         <VStack spacing={8} w="full">
           <Box textAlign="center">
-            <Heading as="h1" size="xl" color="blue.900" mb={4}>
-              Registrace
-            </Heading>
-            <Text color="gray.600" fontSize="lg">
-              Vytvořte si nový účet a začněte používat naši aplikaci
-            </Text>
+            <Logo width="100px" height="auto" />
           </Box>
 
           <RegistrationForm onSubmit={handleRegistration} />
