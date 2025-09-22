@@ -9,7 +9,7 @@ import GlobalStyles from './GlobalStyles';
 import {queryClient} from './utils/queryClient';
 // AuthProvider removed - using useAuth hook directly
 import {ProtectedRoute, HomeRedirect} from './components/common/index';
-import {Login, Registration, Dashboard, NotFound} from './pages/index';
+import {Login, Registration, Dashboard, NotFound, AddTodo, EditTodo} from './pages/index';
 
 function App() {
   const {i18n, t} = useTranslation();
@@ -41,6 +41,24 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/add-todo"
+              element={
+                <ProtectedRoute>
+                  <AddTodo />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/edit-todo/:id"
+              element={
+                <ProtectedRoute>
+                  <EditTodo />
                 </ProtectedRoute>
               }
             />

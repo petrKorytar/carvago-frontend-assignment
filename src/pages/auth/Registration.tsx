@@ -3,6 +3,7 @@ import {Box, Container, Heading, Text, Link, VStack, Center} from '@chakra-ui/re
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {RegistrationForm} from '../../components/forms/RegistrationForm';
 import {useAuth} from '../../hooks/useAuth';
+import {setTokens} from '../../utils/authService';
 
 export const Registration: React.FC = () => {
   const {register} = useAuth();
@@ -14,7 +15,9 @@ export const Registration: React.FC = () => {
         username: data.username,
         password: data.password,
       };
-      await register(correctData);
+      const response = await register(correctData);
+      setTokens(response.accessToken, response.refreshToken);
+      console.log('response', response);
       // Redirect to dashboard after successful registration
       navigate('/dashboard');
     } catch (error) {

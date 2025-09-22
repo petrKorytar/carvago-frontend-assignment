@@ -1,4 +1,4 @@
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import apiAxios from '../utils/apiAxios';
 import {setTokens, clearTokens, getAccessToken} from '../utils/authService';
 
@@ -18,13 +18,6 @@ interface AuthResponse {
   refreshToken: string;
 }
 
-interface User {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-}
-
 // API functions
 const authApi = {
   login: async (data: LoginData): Promise<AuthResponse> => {
@@ -38,12 +31,8 @@ const authApi = {
   },
 
   logout: async (): Promise<void> => {
-    await apiAxios.post('/api/logout');
-  },
-
-  getCurrentUser: async (): Promise<User> => {
-    const response = await apiAxios.get('/api/me');
-    return response.data;
+    // await apiAxios.post('/api/logout');
+    console.log('logout');
   },
 };
 
@@ -51,19 +40,6 @@ const authApi = {
 export const useAuth = () => {
   const queryClient = useQueryClient();
   const token = getAccessToken();
-
-  // Get current user
-  const {
-    data: user,
-    isLoading: isUserLoading,
-    error: userError,
-  } = useQuery({
-    queryKey: ['user'],
-    queryFn: authApi.getCurrentUser,
-    enabled: !!token,
-    retry: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  });
 
   // Login mutation
   const loginMutation = useMutation({
@@ -103,12 +79,12 @@ export const useAuth = () => {
     },
   });
 
-  const isAuthenticated = !!user && !userError;
-  const isLoading = isUserLoading || loginMutation.isPending || registerMutation.isPending;
+  // Authentication is based on token presence, not user data
+  const isAuthenticated = !!token;
+  const isLoading = loginMutation.isPending || registerMutation.isPending;
 
   return {
     // State
-    user,
     isAuthenticated,
     isLoading,
 
