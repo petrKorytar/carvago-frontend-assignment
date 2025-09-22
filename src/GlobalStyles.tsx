@@ -69,7 +69,7 @@ const GlobalStyle = createGlobalStyle`
      font-family: Open-Sans, Helvetica, Sans-Serif;
      font-size: 16px;
      height: 100%;
-   }
- `;
+  }
+`;
 
 export default GlobalStyle;
