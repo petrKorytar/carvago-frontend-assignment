@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Container,
-  Heading,
-  Text,
-  VStack,
-  Card,
-  CardBody,
-  CardHeader,
-  useColorModeValue,
-  useToast,
-} from '@chakra-ui/react';
+import {Container, VStack, Card, CardBody, useColorModeValue, useToast} from '@chakra-ui/react';
 import {useNavigate} from 'react-router-dom';
 import {TodoForm} from '../../components/forms/TodoForm';
 import {useTodos} from '../../hooks/useTodos';

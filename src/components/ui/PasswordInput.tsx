@@ -37,7 +37,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
       {label && (
         <FormLabel htmlFor={id}>
           {required && (
-            <Text as="span" color="red.500">
+            <Text as="span" color="text-danger">
               *
             </Text>
           )}{' '}
@@ -51,13 +51,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
           placeholder={placeholder}
           name={name}
           pr="45px"
-          borderColor={borderColor || (isInvalid ? 'red.500' : 'gray.300')}
-          _focus={
-            _focus || {
-              borderColor: isInvalid ? 'red.500' : 'blue.500',
-              boxShadow: isInvalid ? '0 0 0 1px red.500' : '0 0 0 1px blue.500',
-            }
-          }
+          borderColor={borderColor || (isInvalid ? 'border-danger' : 'border-gray')}
           {...register(name)}
           {...props}
         />
@@ -66,8 +60,8 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
           type="button"
           onClick={() => setShowPassword(!showPassword)}
           cursor="pointer"
-          color="gray.500"
-          _hover={{color: 'gray.700'}}
+          color="text-tertiary"
+          _hover={{color: 'text-secondary'}}
           _focus={{outline: 'none'}}
           aria-label={showPassword ? 'Skrýt heslo' : 'Zobrazit heslo'}
           display="flex"

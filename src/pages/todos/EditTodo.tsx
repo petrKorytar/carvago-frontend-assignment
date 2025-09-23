@@ -8,7 +8,6 @@ import {
   VStack,
   Card,
   CardBody,
-  CardHeader,
   useColorModeValue,
   Spinner,
   Center,
@@ -65,7 +64,7 @@ export const EditTodo: React.FC = () => {
     return (
       <Container maxW="container.md" py={8}>
         <Center>
-          <Spinner size="lg" color="blue.500" />
+          <Spinner size="lg" color="fill-brand" />
         </Center>
       </Container>
     );
@@ -75,7 +74,7 @@ export const EditTodo: React.FC = () => {
     return (
       <Container maxW="container.md" py={8}>
         <Center>
-          <Text color="red.500">Úkol nebyl nalezen nebo došlo k chybě</Text>
+          <Text color="text-danger">Úkol nebyl nalezen nebo došlo k chybě</Text>
         </Center>
       </Container>
     );

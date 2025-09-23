@@ -76,10 +76,10 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
       backgroundColor={'white'}
     >
       <Box textAlign="center" marginBottom={8}>
-        <Heading as="h1" size="lg" color="blue.900" mb={4}>
+        <Heading as="h1" size="lg" color="text-primary" mb={4}>
           Registrace
         </Heading>
-        <Text color="gray.600" fontSize="md">
+        <Text color="text-secondary" fontSize="text.base">
           Vytvořte si nový účet a začněte používat naši aplikaci
         </Text>
       </Box>
@@ -87,7 +87,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
         <VStack spacing={8}>
           <FormControl isInvalid={!!errors.username}>
             <FormLabel htmlFor="username">
-              <Text as="span" color="red.500">
+              <Text as="span" color="text-danger">
                 *
               </Text>{' '}
               Uživatelské jméno
@@ -96,7 +96,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
               id="username"
               type="text"
               placeholder="Zadejte vaše uživatelské jméno"
-              borderColor={errors.username ? 'red.500' : 'gray.300'}
+              borderColor={errors.username ? 'border-danger' : 'border-gray'}
               {...register('username')}
             />
             <FormErrorMessage>{errors.username && errors.username.message}</FormErrorMessage>

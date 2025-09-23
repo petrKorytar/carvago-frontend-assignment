@@ -68,22 +68,22 @@ export const TodoForm: React.FC<TodoFormProps> = ({
             isDisabled={isLoading}
             size="sm"
             borderRadius="full"
-            bg="gray.100"
+            bg="fill-gray"
             borderColor="transparent"
-            _hover={{bg: 'gray.200'}}
-            icon={<BackwardsIcon color="gray.600" />}
+            _hover={{bg: 'fill-gray-hover'}}
+            icon={<BackwardsIcon color="text-secondary" />}
             aria-label="Zrušit"
             minW="40px"
             h="40px"
           />
-          <Text fontWeight={700} fontSize={'24px'}>
+          <Text fontWeight={700} fontSize={'heading.2'}>
             {initialData ? initialData.title : 'Nový úkol'}
           </Text>
         </HStack>
         {/* Title Field */}
         <FormControl isInvalid={!!errors.title}>
-          <FormLabel htmlFor="title" fontSize={'small'}>
-            <Text as="span" color="red.500">
+          <FormLabel htmlFor="title" fontSize={'text.small'}>
+            <Text as="span" color="text-danger">
               *
             </Text>{' '}
             Název úkolu
@@ -92,7 +92,7 @@ export const TodoForm: React.FC<TodoFormProps> = ({
             id="title"
             type="text"
             placeholder="Zadejte název úkolu"
-            borderColor={errors.title ? 'red.500' : 'gray.300'}
+            borderColor={errors.title ? 'border-danger' : 'border-gray'}
             {...register('title')}
           />
           <FormErrorMessage>{errors.title && errors.title.message}</FormErrorMessage>
@@ -100,7 +100,7 @@ export const TodoForm: React.FC<TodoFormProps> = ({
 
         {/* Description Field */}
         <FormControl isInvalid={!!errors.description}>
-          <FormLabel htmlFor="description" fontSize={'small'}>
+          <FormLabel htmlFor="description" fontSize={'text.small'}>
             Popis úkolu
           </FormLabel>
           <Textarea
@@ -108,7 +108,7 @@ export const TodoForm: React.FC<TodoFormProps> = ({
             placeholder="Zadejte popis úkolu (volitelné)"
             rows={4}
             resize="vertical"
-            borderColor={'gray.300'}
+            borderColor={'border-gray'}
             {...register('description')}
           />
           <FormErrorMessage>{errors.description && errors.description.message}</FormErrorMessage>
@@ -131,7 +131,7 @@ export const TodoForm: React.FC<TodoFormProps> = ({
             w={{base: 'full', md: 'auto'}}
             text="Zrušit"
             size="sm"
-            backgroundColor="#F1F2F6"
+            backgroundColor="fill-gray"
             fontWeight={500}
           />
           <CustomButton

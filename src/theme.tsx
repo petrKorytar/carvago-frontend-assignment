@@ -49,8 +49,8 @@ const theme = extendTheme({
     Button: {
       baseStyle: () => ({
         bg: 'unset',
-        backgroundColor: '#0F62FE',
-        color: '#FFFFFF',
+        backgroundColor: 'fill-brand',
+        color: 'text-white',
         borderRadius: '100px',
       }),
     },

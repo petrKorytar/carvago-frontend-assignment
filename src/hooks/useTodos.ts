@@ -85,25 +85,57 @@ export const useTodos = () => {
     },
   });
 
-  // Update todo mutation
+  // Update todo mutation with optimistic updates
   const updateTodoMutation = useMutation({
     mutationFn: ({id, data}: {id: string; data: UpdateTodoData}) => todoApi.updateTodo(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['todos']});
+    onMutate: async ({id, data}) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({queryKey: ['todos']});
+
+      // Snapshot previous value
+      const previousTodos = queryClient.getQueryData(['todos']);
+
+      // Optimistically update
+      queryClient.setQueryData(['todos'], (old: Todo[] = []) =>
+        old.map((todo) => (todo.id === id ? {...todo, ...data} : todo))
+      );
+
+      return {previousTodos};
     },
-    onError: (error) => {
-      console.error('Update todo failed:', error);
+    onError: (err, variables, context) => {
+      // Rollback on error
+      if (context?.previousTodos) {
+        queryClient.setQueryData(['todos'], context.previousTodos);
+      }
+      console.error('Update todo failed:', err);
+    },
+    onSettled: () => {
+      // Always refetch after error or success
+      queryClient.invalidateQueries({queryKey: ['todos']});
     },
   });
 
-  // Delete todo mutation
+  // Delete todo mutation with optimistic updates
   const deleteTodoMutation = useMutation({
     mutationFn: todoApi.deleteTodo,
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['todos']});
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({queryKey: ['todos']});
+      const previousTodos = queryClient.getQueryData(['todos']);
+
+      queryClient.setQueryData(['todos'], (old: Todo[] = []) =>
+        old.filter((todo) => todo.id !== id)
+      );
+
+      return {previousTodos};
     },
-    onError: (error) => {
-      console.error('Delete todo failed:', error);
+    onError: (err, id, context) => {
+      if (context?.previousTodos) {
+        queryClient.setQueryData(['todos'], context.previousTodos);
+      }
+      console.error('Delete todo failed:', err);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({queryKey: ['todos']});
     },
   });
 

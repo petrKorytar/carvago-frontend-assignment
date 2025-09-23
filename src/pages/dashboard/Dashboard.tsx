@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import {
   Box,
   Heading,
@@ -39,68 +39,82 @@ export const Dashboard: React.FC = () => {
 
   const cardBg = useColorModeValue('white', 'gray.800');
 
-  const handleToggleComplete = async (todoId: string, completed: boolean) => {
-    try {
-      if (completed) {
-        await incompleteTodo(todoId);
+  const handleToggleComplete = useCallback(
+    async (todoId: string, completed: boolean) => {
+      try {
+        if (completed) {
+          await incompleteTodo(todoId);
+          toast({
+            title: 'Úkol označen jako nehotový',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+            position: 'top-right',
+          });
+        } else {
+          await completeTodo(todoId);
+          toast({
+            title: 'Úkol označen jako hotový',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+            position: 'top-right',
+          });
+        }
+      } catch (error) {
+        console.error('Failed to toggle todo:', error);
         toast({
-          title: 'Úkol označen jako nehotový',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-          position: 'top-right',
-        });
-      } else {
-        await completeTodo(todoId);
-        toast({
-          title: 'Úkol označen jako hotový',
-          status: 'success',
-          duration: 3000,
+          title: 'Chyba při aktualizaci',
+          status: 'error',
+          duration: 5000,
           isClosable: true,
           position: 'top-right',
         });
       }
-    } catch (error) {
-      console.error('Failed to toggle todo:', error);
-      toast({
-        title: 'Chyba při aktualizaci',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'top-right',
-      });
-    }
-  };
+    },
+    [incompleteTodo, completeTodo, toast]
+  );
 
-  const handleDeleteTodo = async (todoId: string) => {
-    try {
-      await deleteTodo(todoId);
-      toast({
-        title: 'Úkol smazán',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right',
-      });
-    } catch (error) {
-      console.error('Failed to delete todo:', error);
-      toast({
-        title: 'Chyba při mazání',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'top-right',
-      });
-    }
-  };
+  const handleDeleteTodo = useCallback(
+    async (todoId: string) => {
+      try {
+        await deleteTodo(todoId);
+        toast({
+          title: 'Úkol smazán',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+          position: 'top-right',
+        });
+      } catch (error) {
+        console.error('Failed to delete todo:', error);
+        toast({
+          title: 'Chyba při mazání',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+          position: 'top-right',
+        });
+      }
+    },
+    [deleteTodo, toast]
+  );
 
-  const handleAddTodo = () => {
+  const handleAddTodo = useCallback(() => {
     navigate('/add-todo');
-  };
+  }, [navigate]);
 
-  const handleEditTodo = (todoId: string) => {
-    navigate(`/edit-todo/${todoId}`);
-  };
+  const handleEditTodo = useCallback(
+    (todoId: string) => {
+      navigate(`/edit-todo/${todoId}`);
+    },
+    [navigate]
+  );
+
+  // Memoize filtered todos to prevent unnecessary re-renders
+  const incompleteTodos = useMemo(() => todos.filter((todo) => !todo.completed), [todos]);
+
+  const completedTodos = useMemo(() => todos.filter((todo) => todo.completed), [todos]);
 
   return (
     <VStack spacing={8} align="stretch">
@@ -115,8 +129,10 @@ export const Dashboard: React.FC = () => {
               gap={4}
             >
               <VStack align="start" spacing={1}>
-                <Heading size="md">Ahoj uživateli!</Heading>
-                <Text fontSize="sm" color="gray.600">
+                <Heading size="md" color="text-primary">
+                  Ahoj uživateli!
+                </Heading>
+                <Text fontSize="text.small" color="text-secondary">
                   {currentTime}
                 </Text>
               </VStack>
@@ -134,38 +150,36 @@ export const Dashboard: React.FC = () => {
           <CardBody>
             {isLoadingTodos && (
               <Center py={8}>
-                <Spinner size="lg" color="blue.500" />
+                <Spinner size="lg" color="fill-brand" />
               </Center>
             )}
             {todos.length > 0 ? (
               <VStack spacing={6} align="stretch">
-                {/* Sekce: K dokončení */}
-                {todos.filter((todo) => !todo.completed).length > 0 ? (
+                {/* Section TODO */}
+                {incompleteTodos.length > 0 ? (
                   <Box>
                     <Heading
                       size="sm"
-                      color="gray.700"
+                      color="text-secondary"
                       mb={3}
-                      borderBottom={'1px solid #E6E8EF'}
+                      borderBottom={'1px solid #CAD1DE'}
                       fontWeight={600}
                       pb={3}
                     >
                       TO DO
                     </Heading>
                     <VStack spacing={3} align="stretch">
-                      {todos
-                        .filter((todo) => !todo.completed)
-                        .map((todo) => (
-                          <TodoItem
-                            key={todo.id}
-                            todo={todo}
-                            handleEditTodo={handleEditTodo}
-                            handleToggleComplete={handleToggleComplete}
-                            handleDeleteTodo={handleDeleteTodo}
-                            isUpdatingTodo={isCompletingTodo || isIncompletingTodo}
-                            isDeletingTodo={isDeletingTodo}
-                          />
-                        ))}
+                      {incompleteTodos.map((todo) => (
+                        <TodoItem
+                          key={todo.id}
+                          todo={todo}
+                          handleEditTodo={handleEditTodo}
+                          handleToggleComplete={handleToggleComplete}
+                          handleDeleteTodo={handleDeleteTodo}
+                          isUpdatingTodo={isCompletingTodo || isIncompletingTodo}
+                          isDeletingTodo={isDeletingTodo}
+                        />
+                      ))}
                     </VStack>
                   </Box>
                 ) : (
@@ -177,49 +191,47 @@ export const Dashboard: React.FC = () => {
                     gap={4}
                   >
                     <Image1 />
-                    <Text fontSize="lg" fontWeight={700} color="gray.800">
+                    <Text fontSize="lg" fontWeight={700} color="text-primary">
                       Jste skvělí!
                     </Text>
-                    <Text fontSize="sm" color="gray.600">
+                    <Text fontSize="text.small" color="text-secondary">
                       Žádné další úkoly k dokončení
                     </Text>
                   </Box>
                 )}
 
-                {/* Sekce: Dokončené */}
-                {todos.filter((todo) => todo.completed).length > 0 && (
+                {/* Section DONE */}
+                {completedTodos.length > 0 && (
                   <Box>
                     <Heading
                       size="sm"
-                      color="gray.700"
+                      color="text-secondary"
                       mb={3}
-                      borderBottom={'1px solid #E6E8EF'}
+                      borderBottom={'1px solid #CAD1DE'}
                       fontWeight={600}
                       pb={3}
                     >
                       Dokončené
                     </Heading>
                     <VStack spacing={3} align="stretch">
-                      {todos
-                        .filter((todo) => todo.completed)
-                        .map((todo) => (
-                          <TodoItem
-                            key={todo.id}
-                            todo={todo}
-                            handleEditTodo={handleEditTodo}
-                            handleToggleComplete={handleToggleComplete}
-                            handleDeleteTodo={handleDeleteTodo}
-                            isUpdatingTodo={isCompletingTodo || isIncompletingTodo}
-                            isDeletingTodo={isDeletingTodo}
-                          />
-                        ))}
+                      {completedTodos.map((todo) => (
+                        <TodoItem
+                          key={todo.id}
+                          todo={todo}
+                          handleEditTodo={handleEditTodo}
+                          handleToggleComplete={handleToggleComplete}
+                          handleDeleteTodo={handleDeleteTodo}
+                          isUpdatingTodo={isCompletingTodo || isIncompletingTodo}
+                          isDeletingTodo={isDeletingTodo}
+                        />
+                      ))}
                     </VStack>
                   </Box>
                 )}
               </VStack>
             ) : (
               <Center py={8}>
-                <Text color="gray.500">Zatím nemáte žádné úkoly</Text>
+                <Text color="text-tertiary">Zatím nemáte žádné úkoly</Text>
               </Center>
             )}
           </CardBody>

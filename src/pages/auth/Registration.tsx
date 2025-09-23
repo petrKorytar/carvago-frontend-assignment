@@ -27,7 +27,7 @@ export const Registration: React.FC = () => {
   };
 
   return (
-    <Box bg="#F1F2F6" minH="100vh">
+    <Box bg="fill-gray" minH="100vh">
       <Container maxW="container.md" py={8}>
         <Center>
           <VStack spacing={8} w="full">
@@ -38,9 +38,9 @@ export const Registration: React.FC = () => {
             <RegistrationForm onSubmit={handleRegistration} />
 
             <Box textAlign="center">
-              <Text color="gray.600">
+              <Text color="text-secondary">
                 Už máte účet?{' '}
-                <Link as={RouterLink} to="/login" color="blue.500" fontWeight="medium">
+                <Link as={RouterLink} to="/login" color="fill-brand" fontWeight="medium">
                   Přihlaste se zde
                 </Link>
               </Text>

@@ -1,6 +1,3 @@
-// Auth service - localStorage token management
-// API calls are handled by useAuth.ts with Axios + React Query
-
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
 

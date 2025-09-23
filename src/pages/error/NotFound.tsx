@@ -10,13 +10,13 @@ export const NotFound: React.FC = () => {
       <Center>
         <VStack spacing={8} textAlign="center">
           <Box>
-            <Heading as="h1" size="4xl" color="red.500" mb={4}>
+            <Heading as="h1" size="4xl" color="text-danger" mb={4}>
               404
             </Heading>
-            <Heading as="h2" size="xl" color="gray.700" mb={4}>
+            <Heading as="h2" size="xl" color="text-secondary" mb={4}>
               Stránka nenalezena
             </Heading>
-            <Text color="gray.600" fontSize="lg" mb={8}>
+            <Text color="text-secondary" fontSize="lg" mb={8}>
               Omlouváme se, ale stránka kterou hledáte neexistuje.
             </Text>
           </Box>

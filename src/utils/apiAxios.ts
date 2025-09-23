@@ -1,6 +1,7 @@
 import axios, {AxiosInstance, InternalAxiosRequestConfig, AxiosResponse} from 'axios';
 import {getAccessToken, getRefreshToken, setTokens, clearTokens} from './authService';
 
+//TODO  On real project, this should be an environment variable
 const API_BASE_URL = 'http://localhost:3001';
 
 // Create axios instance

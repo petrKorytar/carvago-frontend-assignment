@@ -15,9 +15,16 @@ export const queryClient = new QueryClient({
       staleTime: 5 * 60 * 1000, // 5 minutes
       gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
       refetchOnWindowFocus: false,
+      refetchOnMount: false, // Don't refetch on mount if data is fresh
+      refetchOnReconnect: true, // Refetch when reconnecting to network
     },
     mutations: {
       retry: false,
+      // Add optimistic updates for better UX
+      onMutate: () => {
+        // Cancel outgoing refetches
+        queryClient.cancelQueries();
+      },
     },
   },
 });
