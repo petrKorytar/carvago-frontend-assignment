@@ -38,7 +38,6 @@ export const TodoForm: React.FC<TodoFormProps> = ({
     handleSubmit,
     formState: {errors},
     reset,
-    watch,
   } = useForm<TodoFormData>({
     resolver: yupResolver(todoFormValidation),
     mode: 'onBlur',
@@ -47,8 +46,6 @@ export const TodoForm: React.FC<TodoFormProps> = ({
       description: '',
     },
   });
-
-  const descriptionValue = watch('description');
 
   // Reset form when initialData changes
   React.useEffect(() => {

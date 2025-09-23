@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import React, {useMemo, useCallback} from 'react';
 import {
   Box,
   Heading,
@@ -23,7 +23,7 @@ import moment from 'moment';
 import 'moment/locale/cs';
 
 export const Dashboard: React.FC = () => {
-  const [currentTime, setCurrentTime] = useState(moment().locale('cs').format('DD.MM.YYYY'));
+  const currentTime = moment().locale('cs').format('DD.MM.YYYY');
   const {
     todos,
     isLoadingTodos,

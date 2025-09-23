@@ -13,7 +13,6 @@ interface PasswordInputProps {
   label?: string;
   required?: boolean;
   borderColor?: string;
-  _focus?: any;
   [key: string]: any; // pro spread props
 }
 
@@ -27,7 +26,6 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
   label,
   required = false,
   borderColor,
-  _focus,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
