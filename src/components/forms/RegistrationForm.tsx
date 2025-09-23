@@ -50,6 +50,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
         status: 'success',
         duration: 3000,
         isClosable: true,
+        position: 'top-right',
       });
       reset();
     } catch (error) {
@@ -59,12 +60,21 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
         status: 'error',
         duration: 5000,
         isClosable: true,
+        position: 'top-right',
       });
     }
   };
 
   return (
-    <Box w="full" maxW="xl" mx="auto" p={6} borderRadius="lg" boxShadow="lg">
+    <Box
+      w="full"
+      maxW="lg"
+      mx="auto"
+      p={6}
+      borderRadius="lg"
+      boxShadow="lg"
+      backgroundColor={'white'}
+    >
       <Box textAlign="center" marginBottom={8}>
         <Heading as="h1" size="lg" color="blue.900" mb={4}>
           Registrace
@@ -87,10 +97,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
               type="text"
               placeholder="Zadejte vaše uživatelské jméno"
               borderColor={errors.username ? 'red.500' : 'gray.300'}
-              _focus={{
-                borderColor: errors.username ? 'red.500' : 'blue.500',
-                boxShadow: errors.username ? '0 0 0 1px red.500' : '0 0 0 1px blue.500',
-              }}
               {...register('username')}
             />
             <FormErrorMessage>{errors.username && errors.username.message}</FormErrorMessage>

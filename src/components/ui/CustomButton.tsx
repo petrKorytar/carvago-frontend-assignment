@@ -18,7 +18,7 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   children,
   ...props
 }) => {
-  // Pokud jsou předány children, použij je místo text/icon logiky
+  // If children are passed, use them instead of text/icon logic
   if (children) {
     return (
       <ChakraButton onClick={onClick} {...props}>

@@ -1,6 +1,22 @@
-import {EditIcon, CheckIcon, DeleteIcon} from '@chakra-ui/icons';
-import {Card, CardBody, Flex, VStack, HStack, Badge, IconButton, Text} from '@chakra-ui/react';
+import {CheckIcon} from '@chakra-ui/icons';
+import {
+  Card,
+  CardBody,
+  Flex,
+  VStack,
+  HStack,
+  Badge,
+  IconButton,
+  Text,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from '@chakra-ui/react';
 import React from 'react';
+import {ReactComponent as IconMore} from '../../assets/icons/icon-more.svg';
+import {ReactComponent as EditIcon} from '../../assets/icons/icon-edit.svg';
+import {ReactComponent as DeleteIcon} from '../../assets/icons/icon-delete.svg';
 
 type Todo = {
   id: string;
@@ -26,56 +42,55 @@ const TodoItem: React.FC<TodoItemProps> = ({
   isUpdatingTodo,
   isDeletingTodo,
 }) => (
-  <Card key={todo.id} variant="outline" size="sm">
-    <CardBody>
+  <Card key={todo.id} border={'hidden'} boxShadow="none" size="sm">
+    <CardBody border={'hidden'} boxShadow="none">
       <Flex justify="space-between" align="center">
-        <VStack align="start" spacing={1} flex={1}>
+        <IconButton
+          aria-label="Označit jako hotové"
+          icon={<CheckIcon color={todo.completed ? 'white' : 'transparent'} />}
+          size="sm"
+          colorScheme={todo.completed ? 'blue' : 'gray'}
+          variant="outline"
+          backgroundColor={todo.completed ? undefined : 'transparent'}
+          borderWidth="2px"
+          onClick={() => handleToggleComplete(todo.id, todo.completed)}
+          isLoading={isUpdatingTodo}
+        />
+        <VStack align="start" spacing={1} flex={1} marginLeft={5}>
           <HStack spacing={2}>
-            <Text
-              fontWeight="medium"
-              textDecoration={todo.completed ? 'line-through' : 'none'}
-              color={todo.completed ? 'gray.500' : 'inherit'}
-            >
-              {todo.title}
-            </Text>
-            <Badge colorScheme={todo.completed ? 'green' : 'orange'} size="sm">
-              {todo.completed ? 'Hotovo' : 'Aktivní'}
-            </Badge>
+            <Text fontWeight="500">{todo.title}</Text>
           </HStack>
           {todo.description && (
-            <Text fontSize="sm" color="gray.600">
+            <Text fontSize="sm" color="#7A869A">
               {todo.description}
             </Text>
           )}
         </VStack>
-        <HStack spacing={1}>
-          <IconButton
-            aria-label="Označit jako hotové"
-            icon={<CheckIcon />}
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            aria-label="Možnosti úkolu"
+            icon={<IconMore />}
             size="sm"
-            colorScheme={todo.completed ? 'gray' : 'green'}
-            variant="outline"
-            onClick={() => handleToggleComplete(todo.id, todo.completed)}
-            isLoading={isUpdatingTodo}
+            variant="ghost"
+            backgroundColor="transparent"
+            colorScheme="gray"
           />
-          <IconButton
-            aria-label="Upravit úkol"
-            icon={<EditIcon />}
-            size="sm"
-            colorScheme="blue"
-            variant="outline"
-            onClick={() => handleEditTodo(todo.id)}
-          />
-          <IconButton
-            aria-label="Smazat úkol"
-            icon={<DeleteIcon />}
-            size="sm"
-            colorScheme="red"
-            variant="outline"
-            onClick={() => handleDeleteTodo(todo.id)}
-            isLoading={isDeletingTodo}
-          />
-        </HStack>
+          <MenuList bg="white" boxShadow="lg" border={'1px solid #E6E8EF'}>
+            <MenuItem icon={<EditIcon />} onClick={() => handleEditTodo(todo.id)}>
+              Upravit
+            </MenuItem>
+            <MenuItem
+              icon={<DeleteIcon style={{color: '#E53E3E'}} />}
+              color="red.500"
+              _hover={{bg: 'gray.100'}}
+              onClick={() => handleDeleteTodo(todo.id)}
+              isDisabled={isDeletingTodo}
+            >
+              <Text color="red.500">Smazat</Text>
+            </MenuItem>
+          </MenuList>
+        </Menu>
       </Flex>
     </CardBody>
   </Card>

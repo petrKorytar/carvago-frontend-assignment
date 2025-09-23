@@ -27,25 +27,27 @@ export const Registration: React.FC = () => {
   };
 
   return (
-    <Container maxW="container.md" py={8}>
-      <Center>
-        <VStack spacing={8} w="full">
-          <Box textAlign="center">
-            <Logo width="100px" height="auto" />
-          </Box>
+    <Box bg="#F1F2F6" minH="100vh">
+      <Container maxW="container.md" py={8}>
+        <Center>
+          <VStack spacing={8} w="full">
+            <Box textAlign="center">
+              <Logo width="100px" height="auto" />
+            </Box>
 
-          <RegistrationForm onSubmit={handleRegistration} />
+            <RegistrationForm onSubmit={handleRegistration} />
 
-          <Box textAlign="center">
-            <Text color="gray.600">
-              Už máte účet?{' '}
-              <Link as={RouterLink} to="/login" color="blue.500" fontWeight="medium">
-                Přihlaste se zde
-              </Link>
-            </Text>
-          </Box>
-        </VStack>
-      </Center>
-    </Container>
+            <Box textAlign="center">
+              <Text color="gray.600">
+                Už máte účet?{' '}
+                <Link as={RouterLink} to="/login" color="blue.500" fontWeight="medium">
+                  Přihlaste se zde
+                </Link>
+              </Text>
+            </Box>
+          </VStack>
+        </Center>
+      </Container>
+    </Box>
   );
 };

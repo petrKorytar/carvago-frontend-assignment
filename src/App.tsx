@@ -3,12 +3,11 @@ import {useTranslation} from 'react-i18next';
 import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 import {ChakraProvider} from '@chakra-ui/react';
 import {QueryClientProvider} from '@tanstack/react-query';
-// import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import theme from './theme';
 import GlobalStyles from './GlobalStyles';
 import {queryClient} from './utils/queryClient';
-// AuthProvider removed - using useAuth hook directly
 import {ProtectedRoute, HomeRedirect} from './components/common/index';
+import {AppLayout} from './layout/AppLayout';
 import {Login, Registration, Dashboard, NotFound, AddTodo, EditTodo} from './pages/index';
 
 function App() {
@@ -40,7 +39,9 @@ function App() {
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <AppLayout>
+                    <Dashboard />
+                  </AppLayout>
                 </ProtectedRoute>
               }
             />
@@ -49,7 +50,9 @@ function App() {
               path="/add-todo"
               element={
                 <ProtectedRoute>
-                  <AddTodo />
+                  <AppLayout>
+                    <AddTodo />
+                  </AppLayout>
                 </ProtectedRoute>
               }
             />
@@ -58,7 +61,9 @@ function App() {
               path="/edit-todo/:id"
               element={
                 <ProtectedRoute>
-                  <EditTodo />
+                  <AppLayout>
+                    <EditTodo />
+                  </AppLayout>
                 </ProtectedRoute>
               }
             />
@@ -68,7 +73,6 @@ function App() {
             <Route path="*" element={<Navigate to="/404" replace />} />
           </Routes>
         </Router>
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </ChakraProvider>
     </QueryClientProvider>
   );
